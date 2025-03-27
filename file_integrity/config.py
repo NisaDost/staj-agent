@@ -1,13 +1,10 @@
 import os
 
-# Backend URL
-BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
-
-# Agent ID
-AGENT_ID = os.getenv("AGENT_ID", "agent001")
-
-# Activation token
-ACTIVATION_TOKEN = os.getenv("ACTIVATION_TOKEN", "activation_token")
+# Backend URL (use HTTPS in production)
+BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8080")
 
 # Heartbeat interval in seconds
 HEARTBEAT_INTERVAL = int(os.getenv("HEARTBEAT_INTERVAL", 5))
+
+# Default agent name (can also be prompted from the user)
+AGENT_NAME = os.getenv("AGENT_NAME", "agent-002")
