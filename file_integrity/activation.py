@@ -7,12 +7,12 @@ def activate_agent(user_token):
     payload = {"activationToken": user_token}
     headers = {"Content-Type": "application/json"}
     try:
-        logger.info("Sending activation request to %s", url)
+        #logger.info("Sending activation request to %s", url)
         response = requests.post(url, json=payload, headers=headers)
         response.raise_for_status()
         data = response.json()
-        logger.info("Activation successful: %s", data)
-        return data  # Expected to include agentId, message, etc.
+        #logger.info("Activation successful: %s", data)
+        return data 
     except requests.RequestException as e:
-        logger.error("Activation failed: %s", str(e))
+        logger.error("Activation failed.")
         return None

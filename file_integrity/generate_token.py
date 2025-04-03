@@ -7,11 +7,11 @@ def generate_agent_instance(agent_name):
     payload = {"agentName": agent_name}
     headers = {"Content-Type": "application/json"}
     try:
-        logger.info("Creating agent instance by calling %s", url)
+        # logger.info("Creating agent instance by calling %s", url)
         response = requests.post(url, json=payload, headers=headers)
         response.raise_for_status()
         data = response.json()
-        logger.info("Agent instance created: %s", data)
+        # logger.info("Agent instance created: %s", data)
         return data  # Contains agentId, token, message
     except requests.RequestException as e:
         logger.error("Failed to create agent instance: %s", str(e))

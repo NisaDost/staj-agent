@@ -1,18 +1,12 @@
 import requests
 import time
-from config import BACKEND_URL, AGENT_ID, HEARTBEAT_INTERVAL
+from config import BACKEND_URL, HEARTBEAT_INTERVAL
 from utils import logger
 
-def send_heartbeat():
-    """
-    Sends a heartbeat message to the backend.
-    
-    Returns:
-        dict: The backend's response if successful, otherwise None.
-    """
+def send_heartbeat(agent_id):
     heartbeat_url = f"{BACKEND_URL}/api/v1/agent/heartbeat"
     payload = {
-        "agentId": AGENT_ID,
+        "agentId": agent_id,
         "timestamp": int(time.time()),
         "status": "active",
         "version": "1.0"
@@ -20,25 +14,30 @@ def send_heartbeat():
     headers = {"Content-Type": "application/json"}
 
     try:
-        logger.info("Sending heartbeat to %s with payload: %s", heartbeat_url, payload)
-        # For now, since the endpoint is not implemented, we simulate a successful response.
-        # Uncomment the following lines if the backend endpoint is available:
-
-        # response = requests.post(heartbeat_url, json=payload, headers=headers)
-        # response.raise_for_status()
-        # data = response.json()
-        # logger.info("Heartbeat response: %s", data)
-        # return data
-        
-        # Simulated dummy response:
-        dummy_response = {
-            "directories": ["/path/to/monitor"],
-            "config": {"updateInterval": HEARTBEAT_INTERVAL}
-        }
-        logger.info("Dummy heartbeat response: %s", dummy_response)
-        return dummy_response
+        logger.info("Sending heartbeat to %s", heartbeat_url)
+        response = requests.post(heartbeat_url, json=payload, headers=headers)
+        response.raise_for_status()
+        data = response.json()
+        logger.info("Heartbeat response received: %s", data)
+        return data
     except requests.RequestException as e:
         logger.error("Heartbeat failed: %s", str(e))
         return None
+
+def start_heartbeat_loop(agent_id):
+    """
+    Starts the heartbeat loop that sends heartbeats at regular intervals.
+    """
+    global HEARTBEAT_INTERVAL  # ✅ Declare it as global before modifying
     
-    
+    while True:
+        response = send_heartbeat(agent_id)
+        
+        if response and "config" in response:
+            new_interval = response["config"].get("updateInterval")
+            
+            if new_interval and new_interval != HEARTBEAT_INTERVAL:
+                logger.info("Updating heartbeat interval to %s seconds", new_interval)
+                HEARTBEAT_INTERVAL = new_interval  # ✅ Now modifying the global variable
+        
+        time.sleep(HEARTBEAT_INTERVAL)
