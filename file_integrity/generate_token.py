@@ -1,3 +1,5 @@
+#generate_token.py
+
 import requests
 from config import BACKEND_URL, AGENT_NAME
 from utils import logger

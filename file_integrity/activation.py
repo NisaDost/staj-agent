@@ -1,3 +1,5 @@
+#activation.py
+
 import requests
 from config import BACKEND_URL
 from utils import logger

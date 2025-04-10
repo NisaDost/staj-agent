@@ -1,3 +1,5 @@
+#config.py
+
 import os
 
 # Backend URL (use HTTPS in production)
