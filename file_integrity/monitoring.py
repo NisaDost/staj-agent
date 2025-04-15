@@ -21,12 +21,6 @@ class ChangeHandler(FileSystemEventHandler):
         logger.info(f"[DELETED] Path: {event.src_path}, is_directory={event.is_directory}")
         self.send_event_to_backend(event.src_path, "DELETED")
 
-    def on_moved(self, event):
-        logger.info(f"[MOVED] from {event.src_path} to {event.dest_path}, is_directory={event.is_directory}")
-        # model a move as delete + create
-        self.send_event_to_backend(event.src_path, "DELETED")
-        self.send_event_to_backend(event.dest_path, "CREATED")
-
     def send_event_to_backend(self, path, event_type):
         event_data = {
             "agentId": self.agent_id,

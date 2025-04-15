@@ -15,6 +15,9 @@ def generate_agent_name():
 
 
 def main():
+    # Start local HTTP server for path validation
+    start_agent_http_server_in_background()
+
     user_agent_name = generate_agent_name()
     logger.info("Starting FileIntegrity Agent CLI for agent: %s", user_agent_name)
 
@@ -29,17 +32,18 @@ def main():
         logger.error("Agent ID not found. Exiting.")
         return
 
-    # Start local HTTP server for path validation
-    start_agent_http_server_in_background()
 
     # Activation loop
     activation_info = None
     while activation_info is None:
-        user_token = input("Enter the activation token: ").strip()
-        activation_info = activate_agent(user_token)
-        if activation_info is None:
-            logger.warning("Invalid activation token. Please try again.\n")
-
+        try:
+            user_token = input("Enter the activation token: ").strip()
+            activation_info = activate_agent(user_token)
+            if activation_info is None:
+                logger.warning("Invalid activation token. Please try again.\n")
+        except KeyboardInterrupt:
+            logger.info("Exiting activation process.")
+            return
     logger.info("Activation successful!")
 
     # Start heartbeat and monitoring loop

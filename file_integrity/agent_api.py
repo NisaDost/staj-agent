@@ -13,7 +13,7 @@ def check_path():
     data = request.get_json()
     path = data.get("path")
 
-    logger.info(f"🧪 Received path validation request: {path}")
+    logger.info(f"Received path validation request: {path}")
 
     if not path or not isinstance(path, str):
         return jsonify({"valid": False, "error": "Missing or invalid path"}), 400

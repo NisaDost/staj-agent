@@ -16,5 +16,5 @@ def activate_agent(user_token):
         #logger.info("Activation successful: %s", data)
         return data 
     except requests.RequestException as e:
-        logger.error("Activation failed." + str(e))
+        logger.error("Activation failed. " + str(e))
         return None
