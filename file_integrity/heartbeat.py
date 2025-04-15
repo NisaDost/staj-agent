@@ -1,19 +1,18 @@
 #heartbeat.py
 import requests
 import time
-from config import BACKEND_URL, HEARTBEAT_INTERVAL
+from config import BACKEND_URL, HEARTBEAT_INTERVAL, VERSION
 from utils import logger
 from watchdog.observers import Observer
 from monitoring import ChangeHandler
-
-
+from utils import is_valid_directory_path
 def send_heartbeat(agent_id):
-    heartbeat_url = f"{BACKEND_URL}/api/v1/agent/heartbeat"
+    heartbeat_url = f"{BACKEND_URL}/agent/heartbeat"
     payload = {
         "agentId": agent_id,
         "timestamp": int(time.time()),
         "status": "active",
-        "version": "1.0"
+        "version": f"{VERSION}",
     }
     headers = {"Content-Type": "application/json"}
 
@@ -30,7 +29,7 @@ def send_heartbeat(agent_id):
 
 
 def fetch_directories(agent_id):
-    url = f"{BACKEND_URL}/api/v1/directories/get?agentId={agent_id}"
+    url = f"{BACKEND_URL}/directories/get?agentId={agent_id}"
     try:
         response = requests.get(url)
         response.raise_for_status()
@@ -53,7 +52,7 @@ def start_heartbeat_and_monitoring(agent_id):
 
     try:
         while True:
-            # 1. Heartbeat
+            # Heartbeat
             response = send_heartbeat(agent_id)
             if response and "config" in response:
                 new_interval = response["config"].get("updateInterval")
@@ -61,19 +60,22 @@ def start_heartbeat_and_monitoring(agent_id):
                     logger.info("Updating heartbeat interval to %s seconds", new_interval)
                     HEARTBEAT_INTERVAL = new_interval
 
-            # 2. Fetch updated directory list
+            # Fetch updated directory list
             directories = fetch_directories(agent_id)
             current_directories = set(dir["path"] for dir in directories)
 
-            # 3. Add new directories to monitoring
+            # Add new directories to monitoring    
             new_dirs = current_directories - monitored_paths
             for path in new_dirs:
+                if not is_valid_directory_path(path):
+                    logger.warning("Invalid directory path: %s", path)
+                    continue
                 watch = observer.schedule(event_handler, path, recursive=True)
                 path_to_watch[path] = watch  # Save the watch object
                 monitored_paths.add(path)
                 logger.info(f"✅ Watching: {path}")
 
-            # 4. Remove directories no longer in the list
+            # Remove directories no longer in the list
             dirs_to_remove = monitored_paths - current_directories
             for path in dirs_to_remove:
                 watch = path_to_watch.pop(path, None)  # Retrieve the watch object
@@ -87,4 +89,4 @@ def start_heartbeat_and_monitoring(agent_id):
     except KeyboardInterrupt:
         logger.info("KeyboardInterrupt received, stopping observer.")
         observer.stop()
-    observer.join()
+    observer.join() 

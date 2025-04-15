@@ -5,7 +5,7 @@ from config import BACKEND_URL
 from utils import logger
 
 def activate_agent(user_token):
-    url = f"{BACKEND_URL}/api/v1/agent/activate"
+    url = f"{BACKEND_URL}/agent/activate"
     payload = {"activationToken": user_token}
     headers = {"Content-Type": "application/json"}
     try:
@@ -16,5 +16,5 @@ def activate_agent(user_token):
         #logger.info("Activation successful: %s", data)
         return data 
     except requests.RequestException as e:
-        logger.error("Activation failed.")
+        logger.error("Activation failed." + str(e))
         return None

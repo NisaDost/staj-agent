@@ -2,11 +2,11 @@
 
 import os
 
-# Backend URL (use HTTPS in production)
-BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8080")
+# Backend URL
+BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8080/api/v1")
 
 # Heartbeat interval in seconds
 HEARTBEAT_INTERVAL = int(os.getenv("HEARTBEAT_INTERVAL", 5))
 
-# Default agent name
-AGENT_NAME = os.getenv("AGENT_NAME", "agent-002")
+#APP Version
+VERSION = os.getenv("VERSION", "1.2.0")

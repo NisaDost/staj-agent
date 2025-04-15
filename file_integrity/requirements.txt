@@ -1,2 +1,5 @@
+python version = 3.13
 requests
 watchdog
+pyinstaller
+flask

@@ -34,7 +34,7 @@ class ChangeHandler(FileSystemEventHandler):
         }
         logger.info(f"Sending event: {event_data}")
         try:
-            response = requests.post(f"{BACKEND_URL}/api/v1/events/monitor", json=event_data)
+            response = requests.post(f"{BACKEND_URL}/events/monitor", json=event_data)
             logger.info(f"✅ Backend responded: {response.status_code} - {response.text}")
             response.raise_for_status()
         except requests.RequestException:

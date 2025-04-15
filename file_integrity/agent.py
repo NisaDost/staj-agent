@@ -1,11 +1,11 @@
 #agent.py
 import secrets
 import string
-from config import BACKEND_URL
 from utils import logger
 from generate_token import generate_agent_instance
 from activation import activate_agent
 from heartbeat import start_heartbeat_and_monitoring
+from agent_api import start_agent_http_server_in_background
 
 
 def generate_agent_name():
@@ -18,7 +18,7 @@ def main():
     user_agent_name = generate_agent_name()
     logger.info("Starting FileIntegrity Agent CLI for agent: %s", user_agent_name)
 
-    # Step 1: Create agent instance
+    # Create agent instance
     instance_info = generate_agent_instance(user_agent_name)
     if instance_info is None:
         logger.error("Failed to create agent instance. Exiting.")
@@ -29,7 +29,10 @@ def main():
         logger.error("Agent ID not found. Exiting.")
         return
 
-    # Step 2: Activation loop
+    # Start local HTTP server for path validation
+    start_agent_http_server_in_background()
+
+    # Activation loop
     activation_info = None
     while activation_info is None:
         user_token = input("Enter the activation token: ").strip()
@@ -39,9 +42,8 @@ def main():
 
     logger.info("Activation successful!")
 
-    # Step 3: Start heartbeat and monitoring loop
+    # Start heartbeat and monitoring loop
     start_heartbeat_and_monitoring(agent_id)
-
 
 if __name__ == "__main__":
     main()
