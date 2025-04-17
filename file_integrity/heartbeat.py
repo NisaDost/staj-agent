@@ -45,7 +45,7 @@ def start_heartbeat_and_monitoring(agent_id):
     event_handler = ChangeHandler(agent_id)
     observer = Observer()
     observer.start()
-    logger.info("🚀 Directory monitoring observer started.")
+    logger.info("Directory monitoring observer started.")
 
     monitored_paths = set()
     path_to_watch = {}  # This will map paths to their corresponding watch objects
@@ -73,7 +73,7 @@ def start_heartbeat_and_monitoring(agent_id):
                 watch = observer.schedule(event_handler, path, recursive=True)
                 path_to_watch[path] = watch  # Save the watch object
                 monitored_paths.add(path)
-                logger.info(f"✅ Watching: {path}")
+                logger.info(f"Started Watching: {path}")
 
             # Remove directories no longer in the list
             dirs_to_remove = monitored_paths - current_directories
@@ -82,7 +82,7 @@ def start_heartbeat_and_monitoring(agent_id):
                 if watch:
                     observer.unschedule(watch)  # Unwatch the directory
                 monitored_paths.remove(path)
-                logger.info(f"❌ Stopped watching: {path}")
+                logger.info(f"Stopped watching: {path}")
 
             time.sleep(HEARTBEAT_INTERVAL)
 

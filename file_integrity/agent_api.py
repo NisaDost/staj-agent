@@ -24,7 +24,7 @@ def check_path():
     return jsonify({"valid": True}), 200
 
 def run_agent_server():
-    logger.info("🛰️ Starting local Flask server for agent path validation...")
+    logger.info("Starting local Flask server for agent path validation...")
     app.run(host='0.0.0.0', port=5005, debug=False, use_reloader=False)
 
 def start_agent_http_server_in_background():
