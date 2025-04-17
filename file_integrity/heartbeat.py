@@ -68,7 +68,6 @@ def start_heartbeat_and_monitoring(agent_id):
             new_dirs = current_directories - monitored_paths
             for path in new_dirs:
                 if not is_valid_directory_path(path):
-                    logger.warning("Invalid directory path: %s", path)
                     continue
                 watch = observer.schedule(event_handler, path, recursive=True)
                 path_to_watch[path] = watch  # Save the watch object

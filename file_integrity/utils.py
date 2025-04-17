@@ -50,7 +50,6 @@ def setup_logger(AGENT_NAME: str):
 logger = setup_logger(AGENT_NAME)
 
 def is_valid_directory_path(path):
-    logger.info(f"Validating path: {path}")
     
     # Check if the path exists
     if not os.path.exists(path):
