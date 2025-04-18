@@ -10,8 +10,6 @@ def main():
     # Start local HTTP server for path validation
     start_agent_http_server_in_background()
 
-    logger.info("Starting FileIntegrity Agent CLI for agent: %s", AGENT_NAME)
-
     # Create agent instance
     instance_info = generate_agent_instance(AGENT_NAME)
     if instance_info is None:
@@ -25,9 +23,11 @@ def main():
 
 
     # Activation loop
+    logger.info("Starting FileIntegrity Agent CLI for agent %s with ID: %s", AGENT_NAME, agent_id)
     activation_info = None
     while activation_info is None:
         try:
+            
             user_token = input("Enter the activation token: ").strip()
             activation_info = activate_agent(user_token)
             if activation_info is None:
