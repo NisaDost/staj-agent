@@ -1,5 +1,5 @@
 #agent.py
-
+import time
 from utils import logger, AGENT_NAME
 from generate_token import generate_agent_instance
 from activation import activate_agent
@@ -23,6 +23,7 @@ def main():
 
 
     # Activation loop
+    time.sleep(1)  # Wait for a moment before starting flask server
     logger.info("Starting FileIntegrity Agent CLI for agent %s with ID: %s", AGENT_NAME, agent_id)
     activation_info = None
     while activation_info is None:
