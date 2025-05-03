@@ -12,11 +12,10 @@ def main():
 
     # Create agent instance
     instance_info = generate_agent_instance(AGENT_NAME)
-    if instance_info is None:
-        logger.error("Failed to create agent instance. Exiting.")
-        return
 
     agent_id = instance_info.get("agentId")
+    logger.info("Agent ID: %s", agent_id)
+
     if not agent_id:
         logger.error("Agent ID not found. Exiting.")
         return

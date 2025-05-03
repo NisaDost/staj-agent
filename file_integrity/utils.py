@@ -3,8 +3,6 @@ import logging
 import os
 import secrets
 import string
-import logging
-import os
 
 def generate_agent_name():
     """Generates a random 12-character agent name."""
