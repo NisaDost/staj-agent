@@ -66,3 +66,8 @@ The **Agent App** is responsible for monitoring directories specified by the use
 - The agent should be run on the system you want to monitor.
 
 - Ensure network access between the agent and the backend API.
+
+# 👨‍💻 Author
+- Nisa Dost
+- Intern @ InfinitumIT
+- Project: FileIntegrity Monitoring System
