@@ -1,5 +1,0 @@
-python
-requests
-watchdog
-pyinstaller
-flask
